@@ -21,5 +21,8 @@
     "test": "nyc --report-dir=\"coverage/src\" ava tests/*.js --verbose",
     "report-coverage": "nyc report --reporter=lcov > coverage.lcov && codecov",
     "postinstall": "backpack build"
+  },
+  "engines": {
+    "node": ">=8.0.0"
   }
 }
