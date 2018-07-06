@@ -20,7 +20,7 @@
   "scripts": {
     "test": "nyc --report-dir=\"coverage/src\" ava tests/*.js --verbose",
     "report-coverage": "nyc report --reporter=lcov > coverage.lcov && codecov",
-    "postinstall": "backpack build"
+    "postinstall": "npm i --save-dev backpack-core && backpack build"
   },
   "engines": {
     "node": ">=8.0.0"
