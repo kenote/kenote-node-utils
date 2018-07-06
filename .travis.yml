@@ -4,6 +4,8 @@ node_js:
   - 9
   - 10
 sudo: false
+before_script:
+  - npm i -g babel-cli
 script: 
   - npm run test
   - npm run report-coverage
