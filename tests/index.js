@@ -1,5 +1,5 @@
 import test from 'ava'
-import * as utils from '../build'
+import * as utils from '../lib'
 
 test('loadConfig -> File not found', t => {
   const config = utils.loadConfig('')

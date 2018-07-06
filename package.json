@@ -1,8 +1,8 @@
 {
   "name": "kenote-node-utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "nodej utils",
-  "main": "./build/index.js",
+  "main": "./lib/index.js",
   "repository": "https://github.com/kenote/kenote-node-utils.git",
   "author": "thondery <thondery@163.com>",
   "license": "MIT",
@@ -12,15 +12,15 @@
   },
   "devDependencies": {
     "ava": "^0.25.0",
-    "backpack-core": "^0.7.0",
     "codecov": "^3.0.3",
     "fs-extra": "^6.0.1",
     "nyc": "^12.0.2"
   },
   "scripts": {
+    "build": "babel src -d lib",
     "test": "nyc --report-dir=\"coverage/src\" ava tests/*.js --verbose",
     "report-coverage": "nyc report --reporter=lcov > coverage.lcov && codecov",
-    "postinstall": "npm i --save-dev backpack-core && backpack build"
+    "postinstall": "npm run build"
   },
   "engines": {
     "node": ">=8.0.0"
