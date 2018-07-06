@@ -19,6 +19,16 @@ Node.js Utils
 [licensed-image]: https://img.shields.io/badge/license-MIT-blue.svg
 [licensed-url]: https://github.com/kenote/kenote-node-utils/blob/master/LICENSE
 
+## Engines
+
+- `Node.js` >= `8.0.0`
+
+## Install
+
+```bash
+yarn add kenote-node-utils
+```
+
 ## Features
 
 - loadConfig
