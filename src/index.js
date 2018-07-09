@@ -19,3 +19,11 @@ export const loadConfig = filePath => {
   }
   return configInfo
 }
+
+export const getMongooseOptions = version => {
+  let mongooseVersion = Number(version.match(/(\d+)(\.)(\d+)/)[0])
+  let options = {
+    ... mongooseVersion < 5 ? { useMongoClient: true } : { useNewUrlParser: true }
+  }
+  return options
+}

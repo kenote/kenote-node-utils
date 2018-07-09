@@ -2,6 +2,8 @@
 
 Node.js Utils
 
+![NPM](https://nodei.co/npm/kenote-node-utils.png?downloads=true)
+
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 [![Build Status][travis-image]][travis-url]
@@ -44,7 +46,7 @@ console.log(config)
   HOST: '0.0.0.0',
   POST: 4000
 }
-/*
+*/
 ```
 
 :: `config.ini`
@@ -54,6 +56,26 @@ console.log(config)
 
 HOST = 0.0.0.0
 PORT = 4000
+```
+
+- getMongooseOptions
+
+```js
+import * as utils from 'kenote-node-utils'
+
+const options = utils.getMongooseOptions('4.2.2')
+/*
+{
+  useMongoClient: true
+}
+*/
+
+const options = utils.getMongooseOptions('5.2.2')
+/*
+{
+  useNewUrlParser: true
+}
+*/
 ```
 
 ## License
