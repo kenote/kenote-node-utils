@@ -3,6 +3,8 @@ import fs from 'fs-extra'
 import isJson from 'is-json'
 import ini from 'ini'
 import crypto from 'crypto'
+import { isRegExp, isUndefined } from 'util'
+import _ from 'lodash'
 
 export const loadConfig = filePath => {
   let configInfo = {}
@@ -57,4 +59,81 @@ export const isAccess = (auth, access = null) => {
     result = access(auth)
   }
   return result
+}
+
+export const isNull = value => String(value || '').length === 0 && value !== 0
+
+export const checkLength = (str) => {
+  let size = 0
+  if (isNull(str)) return size
+  let arr = str.split('')
+  for (let word of arr) {
+    size++
+    (/[^\x00-\xff]/g.test(word)) && size++
+  }
+  return size
+}
+
+export const isPattern = (value, rule) => {
+  let regExp = isRegExp(rule.pattern) ? rule.pattern : new RegExp(rule.pattern)
+  let valid = regExp.test(value)
+  if (valid) {
+    let size = checkLength(value)
+    if (rule.min && size < rule.min) {
+      valid = false
+    }
+    if (rule.max && size > rule.max) {
+      valid = false
+    }
+  }
+  return valid
+}
+
+const validMessage = (rule, message = '') => (
+  {
+    message,
+    ..._.pick(rule, ['message', 'code'])
+  }
+)
+
+export const validRule = (value, rules = []) => {
+  for (let rule of rules) {
+    if (rule.required && isNull(value)) {
+      return validMessage(rule, 'Value cannot be empty.')
+    }
+    if (rule.pattern && !isPattern(value, rule)) {
+      return validMessage(rule, 'Wrong value format.')
+    }
+  }
+  return null
+}
+
+const chooseOne = (data) => {
+  let result = true
+  for (let item of data) {
+    result = isUndefined(item)
+    if (!result) break
+  }
+  return result
+}
+
+export const filterData = (filters, done, options = {}) => {
+  let info = {}
+  for (let item of filters) {
+    if (item.ignore && isUndefined(item.value)) continue
+    info[item.key] = item.value
+    let itemValid = validRule(item.value, item.rules)
+    if (itemValid) {
+      return done(null, itemValid)
+    }
+  }
+  if (options.picks) {
+    for (let item of options.picks) {
+      let pick = chooseOne(item.data)
+      if (pick) {
+        return done(null, validMessage(item))
+      }
+    }
+  }
+  return done(info)
 }

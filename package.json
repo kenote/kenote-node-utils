@@ -1,6 +1,6 @@
 {
   "name": "kenote-node-utils",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "nodej utils",
   "main": "./lib/index.js",
   "repository": "https://github.com/kenote/kenote-node-utils.git",
@@ -26,5 +26,9 @@
   },
   "engines": {
     "node": ">=8.0.0"
-  }
+  },
+  "keywords": [
+    "node-js",
+    "utils"
+  ]
 }

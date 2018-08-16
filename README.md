@@ -41,6 +41,11 @@ yarn add kenote-node-utils
 - [x] [validPassword](#validPassword)
 - [x] [isAccess](#isAccess)
 - [x] [callback](#callback)
+- [x] [isNull](#isNull)
+- [x] [checkLength](#checkLength)
+- [x] [isPattern](#isPattern)
+- [x] [validRule](#validRule)
+- [x] [filterData](#filterData)
 
 ### loadConfig
 
@@ -160,6 +165,103 @@ import { callback } from 'kenote-node-utils'
   const result = await new Promise((resolve, reject) => callback(resolve, reject, null, 1))
   console.log(result)
 })()
+```
+
+### isNull
+
+app.js
+```js
+import { isNull } from 'kenote-node-utils'
+
+console.log(isNull(null))
+```
+
+### checkLength
+
+app.js
+```js
+import { checkLength } from 'kenote-node-utils'
+
+console.log(checkLength('你好123')) // 7
+```
+
+### isPattern
+
+app.js
+```js
+import { isPattern } from 'kenote-node-utils'
+
+const result1 = isPattern('123456', { pattern: /^[0-9]+$/, min: 4, max: 10 }) // true
+const result2 = isPattern('123456', { pattern: '^[0-9]+$', min: 4, max: 10 }) // true
+```
+
+### validRule
+
+app.js
+```js
+import { validRule } from 'kenote-node-utils'
+
+const rules = [
+  { required: true, message: 'Value cannot be empty.', code: 1001 },
+  { pattern: /^[0-9]+$/, message: 'Wrong value format.', code: 1002 }
+]
+const result = utils.validRule('123456', rules) // null
+const result = utils.validRule('', rules) // { message: 'Value cannot be empty.', code: 1001 }
+const result = utils.validRule('abc', rules) // { message: 'Wrong value format.', code: 1002 }
+```
+
+### filterData
+
+app.js
+```js
+import { filterData } from 'kenote-node-utils'
+
+const rules = {
+  username: [
+    { required: true, message: 'Name cannot be empty.', code: 1001 },
+    { pattern: /^[a-zA-Z]{1}[a-zA-Z0-9_]{3,11}$/, message: 'Wrong name format.', code: 1002 }
+  ],
+  email: [
+    { required: true, message: 'Email cannot be empty.', code: 1003 },
+    { pattern: /^[a-z_0-9.-]{1,64}@([a-z0-9-]{1,200}.){1,5}[a-z]{1,6}/, message: 'Wrong email format.', code: 1004 }
+  ],
+  phone: [
+    { required: true, message: 'Phone cannot be empty.', code: 1005 },
+    { pattern: /^0?(12[0-9]|13[0-9]|14[57]|15[012356789]|16[0-9]|17[0-9]|18[0-9]|19[0-9])[0-9]{8}$/, message: 'Wrong phone format.', code: 1006 }
+  ],
+  password: [
+    { required: true, message: 'Password cannot be empty.', code: 1007 },
+    { pattern: /^(?=.*[A-Za-z])[A-Za-z0-9$@$!%*#?&]{6,32}$/, message: 'Wrong password format.', code: 1008 }
+  ],
+}
+const info = {
+  username: 'thondery',
+  email: 'thondery163.com',
+  password: 'a123456'
+}
+const { username, email, phone, password } = info
+const filters = [
+  { key: 'username', rules: rules.username, value: username },
+  { key: 'email', rules: rules.email, value: email, ignore: true },
+  { key: 'phone', rules: rules.phone, value: phone, ignore: true },
+  { key: 'password', rules: rules.password, value: password }
+]
+const options = {
+  picks: [
+    { 
+      data: [ email, phone ],
+      message: 'Email, phone number must be set one', 
+      code: 1009
+    }
+  ]
+}
+filterData(filters, (data, message) => {
+  if (message) {
+    console.log(message)
+    return
+  }
+  console.log(data)
+}, options)
 ```
 
 ## License
