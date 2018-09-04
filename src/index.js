@@ -3,7 +3,7 @@ import fs from 'fs-extra'
 import isJson from 'is-json'
 import ini from 'ini'
 import crypto from 'crypto'
-import { isRegExp, isUndefined } from 'util'
+import { isRegExp, isUndefined, format } from 'util'
 import _ from 'lodash'
 
 export const loadConfig = filePath => {
@@ -122,9 +122,22 @@ export const filterData = (filters, done, options = {}) => {
   for (let item of filters) {
     if (item.ignore && isUndefined(item.value)) continue
     info[item.key] = item.value
-    let itemValid = validRule(item.value, item.rules)
-    if (itemValid) {
-      return done(null, itemValid)
+    if (_.isObject(item.value)) {
+      for (let key in item.value) {
+        let itemValid = validRule(item.value[key], item.rules)
+        if (itemValid) {
+          if (itemValid.message) {
+            itemValid = { ...itemValid, message: format(itemValid.message, format(item.label, key)) }
+          }
+          return done(null, itemValid)
+        }
+      }
+    }
+    else {
+      let itemValid = validRule(item.value, item.rules)
+      if (itemValid) {
+        return done(null, itemValid)
+      }
     }
   }
   if (options.picks) {

@@ -18,6 +18,9 @@ const rules = {
     { required: true, message: 'Password cannot be empty.', code: 1007 },
     { pattern: /^(?=.*[A-Za-z])[A-Za-z0-9$@$!%*#?&]{6,32}$/, message: 'Wrong password format.', code: 1008 }
   ],
+  website: [
+    { pattern: '^(https?:\/\/)', message: 'Wrong websit format for %s.', code: 1009 }
+  ]
 }
 
 test('loadConfig -> File not found', t => {
@@ -150,14 +153,19 @@ test('filterData -> ok', t => {
   let info = {
     username: 'thondery',
     email: 'thondery@163.com',
-    password: 'a123456'
+    password: 'a123456',
+    repository: {
+      github: 'https://github.com/thondery',
+      gitee: 'https://gitee.com/thondery'
+    }
   }
-  let { username, email, phone, password } = info
+  let { username, email, phone, password, repository } = info
   let filters = [
     { key: 'username', rules: rules.username, value: username },
     { key: 'email', rules: rules.email, value: email, ignore: true },
     { key: 'phone', rules: rules.phone, value: phone, ignore: true },
-    { key: 'password', rules: rules.password, value: password }
+    { key: 'password', rules: rules.password, value: password },
+    { key: 'repository', rules: rules.website, value: repository, label: `%s地址` }
   ]
   let options = {
     picks: [
