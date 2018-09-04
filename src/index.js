@@ -127,7 +127,7 @@ export const filterData = (filters, done, options = {}) => {
         let itemValid = validRule(item.value[key], item.rules)
         if (itemValid) {
           if (itemValid.message) {
-            itemValid = { ...itemValid, message: format(itemValid.message, format(item.label, key)) }
+            itemValid = { ...itemValid, message: format(itemValid.message, format(item.label || '', key)) }
           }
           return done(null, itemValid)
         }
@@ -136,6 +136,9 @@ export const filterData = (filters, done, options = {}) => {
     else {
       let itemValid = validRule(item.value, item.rules)
       if (itemValid) {
+        if (itemValid.message) {
+          itemValid = { ...itemValid, message: format(itemValid.message, item.label || '') }
+        }
         return done(null, itemValid)
       }
     }
