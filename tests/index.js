@@ -208,8 +208,8 @@ test('filterData -> error', t => {
   }
   utils.filterData(filters, (data, message) => {
     if (message) {
-      t.deepEqual(message, { message: 'Wrong email format.', code: 1004 })
+      t.deepEqual(message, { message: 'Wrong email format. ', code: 1004 })
     }
-    t.pass
+    t.pass()
   }, options)
 })
